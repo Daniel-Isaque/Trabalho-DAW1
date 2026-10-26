@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IFEventos - Portal Acadêmico IFPB</title>
+  <style>
+    :root {
+      --ifpb-green: #1b5e20;
+      --ifpb-green-hover: #2e7d32;
+      --ifpb-accent: #81c784;
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-main: #2c3e50;
+      --text-muted: #666666;
+      --danger: #d32f2f;
+      --warning: #f57c00;
+      --border-color: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* --- CABEÇALHO E NAVEGAÇÃO --- */
+    header {
+      background-color: var(--ifpb-green);
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand span {
+      font-size: 12px;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Menu de Abas */
+    nav.nav-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    .tab-btn.active {
+      background-color: #ffffff;
+      color: var(--ifpb-green);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* --- CONTEÚDO PRINCIPAL --- */
+    main.container {
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Esconder/Exibir Abas */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- ABA 1: EVENTOS DISPONÍVEIS --- */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 18px;
+      border-radius: 10px;
+      border-left: 5px solid var(--ifpb-green);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-card small {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .stat-card span {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--ifpb-green);
+      margin-top: 4px;
+    }
+
+    /* Barra de Pesquisa */
+    .search-filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrapper {
+      flex: 3;
+      min-width: 260px;
+      position: relative;
+    }
+
+    input, select, textarea, button {
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--ifpb-green);
+      box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.12);
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+    }
+
+    .category-select {
+      flex: 1;
+      min-width: 180px;
+      background-color: var(--card-bg);
+      cursor: pointer;
+    }
+
+    /* Grid de Eventos */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 22px;
+    }
+
+    .event-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .event-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+
+    .badge-category {
+      align-self: flex-start;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .badge-Minicurso { background: #e8f5e9; color: #1b5e20; }
+    .badge-Palestra { background: #e3f2fd; color: #0d47a1; }
+    .badge-Workshop { background: #fff3e0; color: #e65100; }
+
+    .event-card h3 {
+      font-size: 18px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .event-details {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .event-details p {
+      margin-bottom: 5px;
+    }
+
+    .event-footer {
+      border-top: 1px solid var(--border-color);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .seats-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ifpb-green);
+    }
+
+    .seats-count.low {
+      color: var(--danger);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-subscribe {
+      background-color: var(--ifpb-green);
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    .btn-subscribe:hover {
+      background-color: var(--ifpb-green-hover);
+    }
+
+    .btn-unsubscribe {
+      background-color: var(--warning);
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--danger);
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-delete:hover {
+      background: #ffebee;
+      border-color: var(--danger);
+    }
+
+    /* --- ABA 2: CADASTRAR EVENTO --- */
+    .form-wrapper {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-header {
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--bg-color);
+      padding-bottom: 12px;
+    }
+
+    .form-header h2 {
+      font-size: 20px;
+      color: var(--ifpb-green);
+    }
+
+    .form-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .btn-submit {
+      background-color: var(--ifpb-green);
+      color: white;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 12px 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      grid-column: span 2;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--ifpb-green-hover);
+    }
+
+    /* Empty State */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      color: var(--text-muted);
+    }
+
+    /* --- RODAPÉ --- */
+    footer {
+      background-color: #1e293b;
+      color: #94a3b8;
+      text-align: center;
+      padding: 18px 20px;
+      font-size: 13px;
+      margin-top: auto;
+    }
+
+    /* Responsividade */
+    @media (max-width: 640px) {
+      .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full-width, .btn-submit {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABEÇALHO COM LOGO E ABAS DE NAVEGAÇÃO -->
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <h1>IFEventos</h1>
+        <span>Câmpus IFPB</span>
+      </div>
+      
+      <!-- Abas para Alternar de Página -->
+      <nav class="nav-tabs">
+        <button class="tab-btn active" id="tab-btn-events" onclick="switchTab('events')">
+          Eventos Disponíveis
+        </button>
+        <button class="tab-btn" id="tab-btn-register" onclick="switchTab('register')">
+          Cadastrar Evento
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL DA APLICAÇÃO -->
+  <main class="container">
+
+    <!-- ABA 1: PÁGINA INICIAL (CATÁLOGO DE EVENTOS DISPONÍVEIS) -->
+    <section id="tab-events" class="tab-content active">
+      
+      <!-- Indicadores do Sistema -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <small>Total de Eventos</small>
+          <span id="stat-total">0</span>
+        </div>
+        <div class="stat-card">
+          <small>Vagas Abertas</small>
+          <span id="stat-vagas">0</span>
+        </div>
+        <div class="stat-card">
+          <small>Minhas Inscrições</small>
+          <span id="stat-inscritos">0</span>
+        </div>
+      </div>
+
+      <!-- Barra de Busca e Filtro de Categoria -->
+      <div class="search-filter-bar">
+        <div class="search-input-wrapper">
+          <input type="text" id="search-input" placeholder="Pesquisar por título do evento ou ministrante...">
+        </div>
+        <select id="filter-category" class="category-select">
+          <option value="todos">Todas as Categorias</option>
+          <option value="Minicurso">Minicursos</option>
+          <option value="Palestra">Palestras</option>
+          <option value="Workshop">Workshops</option>
+        </select>
+      </div>
+
+      <!-- Grade Onde Ficam os Eventos Cadastrados -->
+      <div id="events-grid" class="events-grid"></div>
+
+    </section>
+
+    <!-- ABA 2: PÁGINA DE CADASTRO DE NOVO EVENTO -->
+    <section id="tab-register" class="tab-content">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h2>Cadastrar Novo Evento Acadêmico</h2>
+          <p>Preencha os dados abaixo para publicar um evento no portal do IFPB.</p>
+        </div>
+
+        <form id="event-form">
+          <div class="form-grid">
+            
+            <div class="form-group full-width">
+              <label for="title">Título do Evento *</label>
+              <input type="text" id="title" placeholder="Ex: Introdução ao Desenvolvimento Web com JS" required minlength="3">
+            </div>
+
+            <div class="form-group">
+              <label for="speaker">Ministrante / Palestrante *</label>
+              <input type="text" id="speaker" placeholder="Ex: Prof. Carlos Eduardo" required minlength="3">
+            </div>
+
+            <div class="form-group">
+              <label for="category">Categoria *</label>
+              <select id="category" required>
+                <option value="Minicurso">Minicurso</option>
+                <option value="Palestra">Palestra</option>
+                <option value="Workshop">Workshop</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="datetime">Data e Horário *</label>
+              <input type="datetime-local" id="datetime" required>
+            </div>
+
+            <div class="form-group">
+              <label for="location">Local do Evento *</label>
+              <input type="text" id="location" placeholder="Ex: Laboratório de Informática 03" required minlength="3">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="vagas">Quantidade de Vagas Abertas *</label>
+              <input type="number" id="vagas" placeholder="Ex: 25" min="1" max="500" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Salvar e Publicar Evento</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ DA PÁGINA -->
+  <footer>
+    <p>IFEventos - Desenvolvido por Luan Bento e Equipe - Instituto Federal da Paraíba (IFPB)</p>
+  </footer>
+
+  <!-- LÓGICA EM JAVASCRIPT -->
+  <script>
+    let events = JSON.parse(localStorage.getItem('ifeventos_real_db')) || [
+      {
+        id: 1,
+        title: 'Introdução ao Desenvolvimento Web com JS',
+        speaker: 'Prof. Carlos Eduardo',
+        datetime: '2026-11-10T14:00',
+        location: 'Laboratório de Informática 03',
+        category: 'Minicurso',
+        vagas: 15,
+        subscribed: false
+      },
+      {
+        id: 2,
+        title: 'Inteligência Artificial na Prática',
+        speaker: 'Dra. Rebeca Lima',
+        datetime: '2026-11-15T19:00',
+        location: 'Auditório Principal',
+        category: 'Palestra',
+        vagas: 45,
+        subscribed: false
+      }
+    ];
+
+    const eventsGrid = document.getElementById('events-grid');
+    const searchInput = document.getElementById('search-input');
+    const filterCategory = document.getElementById('filter-category');
+    const eventForm = document.getElementById('event-form');
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      if (tabName === 'events') {
+        document.getElementById('tab-events').classList.add('active');
+        document.getElementById('tab-btn-events').classList.add('active');
+      } else if (tabName === 'register') {
+        document.getElementById('tab-register').classList.add('active');
+        document.getElementById('tab-btn-register').classList.add('active');
+      }
+    }
+
+    function saveAndRender() {
+      localStorage.setItem('ifeventos_real_db', JSON.stringify(events));
+      renderEvents();
+    }
+
+    function renderEvents() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      const selectedCategory = filterCategory.value;
+
+      eventsGrid.innerHTML = '';
+
+      const filteredEvents = events.filter(evt => {
+        const matchesSearch = evt.title.toLowerCase().includes(searchTerm) || evt.speaker.toLowerCase().includes(searchTerm);
+        const matchesCategory = selectedCategory === 'todos' || evt.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      });
+
+      if (filteredEvents.length === 0) {
+        eventsGrid.innerHTML = `
+          <div class="empty-state">
+            <p>Nenhum evento acadêmico encontrado.</p>
+          </div>
+        `;
+        updateStats();
+        return;
+      }
+
+      filteredEvents.forEach(evt => {
+        const card = document.createElement('article');
+        card.className = 'event-card';
+
+        const formattedDate = new Date(evt.datetime).toLocaleString('pt-BR', {
+          dateStyle: 'short',
+          timeStyle: 'short'
+        });
+
+        card.innerHTML = `
+          <div>
+            <span class="badge-category badge-${evt.category}">${evt.category}</span>
+            <h3>${evt.title}</h3>
+            <div class="event-details">
+              <p><strong>Ministrante:</strong> ${evt.speaker}</p>
+              <p><strong>Data/Hora:</strong> ${formattedDate}</p>
+              <p><strong>Local:</strong> ${evt.location}</p>
+            </div>
+          </div>
+          <div class="event-footer">
+            <span class="seats-count ${evt.vagas <= 5 ? 'low' : ''}">
+              ${evt.vagas} vaga(s) restante(s)
+            </span>
+            <div class="card-actions">
+              <button class="${evt.subscribed ? 'btn-unsubscribe' : 'btn-subscribe'}" 
+                      onclick="toggleSubscription(${evt.id})" 
+                      ${!evt.subscribed && evt.vagas === 0 ? 'disabled' : ''}>
+                ${evt.subscribed ? 'Cancelar' : (evt.vagas === 0 ? 'Esgotado' : 'Garantir Vaga')}
+              </button>
+              <button class="btn-delete" onclick="deleteEvent(${evt.id})" title="Excluir Evento">Excluir</button>
+            </div>
+          </div>
+        `;
+
+        eventsGrid.appendChild(card);
+      });
+
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById('stat-total').innerText = events.length;
+      
+      const totalVagas = events.reduce((acc, evt) => acc + Number(evt.vagas), 0);
+      document.getElementById('stat-vagas').innerText = totalVagas;
+
+      const totalInscritos = events.filter(evt => evt.subscribed).length;
+      document.getElementById('stat-inscritos').innerText = totalInscritos;
+    }
+
+    eventForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const title = document.getElementById('title').value.trim();
+      const speaker = document.getElementById('speaker').value.trim();
+      const datetime = document.getElementById('datetime').value;
+      const location = document.getElementById('location').value.trim();
+      const category = document.getElementById('category').value;
+      const vagas = parseInt(document.getElementById('vagas').value);
+
+      const regexPalavraValida = /[a-zA-ZÀ-ÿ0-9]{3,}/;
+
+      if (!title || !regexPalavraValida.test(title)) {
+        alert('Por favor, informe um Título válido (deve conter pelo menos uma palavra com 3 ou mais letras).');
+        document.getElementById('title').focus();
+        return;
+      }
+
+      if (!speaker || !regexPalavraValida.test(speaker)) {
+        alert('Por favor, informe um nome de Ministrante válido.');
+        document.getElementById('speaker').focus();
+        return;
+      }
+
+      if (!location || !regexPalavraValida.test(location)) {
+        alert('Por favor, informe um Local válido.');
+        document.getElementById('location').focus();
+        return;
+      }
+
+      const newEvent = {
+        id: Date.now(),
+        title: title,
+        speaker: speaker,
+        datetime: datetime,
+        location: location,
+        category: category,
+        vagas: vagas,
+        subscribed: false
+      };
+
+      events.unshift(newEvent);
+      saveAndRender();
+      eventForm.reset();
+
+      alert('Evento cadastrado e publicado com sucesso!');
+      switchTab('events');
+    });
+
+    function toggleSubscription(id) {
+      events = events.map(evt => {
+        if (evt.id === id) {
+          if (evt.subscribed) {
+            return { ...evt, subscribed: false, vagas: evt.vagas + 1 };
+          } else if (evt.vagas > 0) {
+            return { ...evt, subscribed: true, vagas: evt.vagas - 1 };
+          }
+        }
+        return evt;
+      });
+      saveAndRender();
+    }
+
+    function deleteEvent(id) {
+      if (confirm('Tem certeza que deseja remover este evento?')) {
+        events = events.filter(evt => evt.id !== id);
+        saveAndRender();
+      }
+    }
+
+    searchInput.addEventListener('input', renderEvents);
+    filterCategory.addEventListener('change', renderEvents);
+
+    renderEvents();
+  </script>
+</body>
+</html>
