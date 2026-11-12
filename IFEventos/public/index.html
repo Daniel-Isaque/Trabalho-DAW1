@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="IFEventos - Portal Acadêmico de Divulgação e Gestão de Eventos do IFPB">
+  <title>IFEventos - Portal Acadêmico IFPB</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('ifeventos_theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+  <script src="js/api.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+
+  <!-- =========================================================
+       TELA DE AUTENTICAÇÃO (LAYOUT SPLIT PROFISSIONAL SEM ABAS)
+       ========================================================= -->
+  <section id="login-screen" class="login-screen" aria-labelledby="login-heading">
+    <div class="login-top-bar">
+      <button type="button" class="btn-theme-toggle login-theme-btn" id="login-theme-toggle" aria-label="Ativar modo escuro" aria-pressed="false">
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+        </svg>
+        <span class="theme-label" id="login-theme-label">Modo Escuro</span>
+      </button>
+    </div>
+
+    <div class="auth-container">
+      <!-- Painel Esquerdo: Identidade Institucional IFPB -->
+      <aside class="auth-showcase">
+        <div class="showcase-top">
+          <span class="showcase-pill">Instituto Federal da Paraíba</span>
+          <h1 id="login-heading">IFEventos</h1>
+          <p class="showcase-subtitle">
+            O portal centralizado para descobrir, acompanhar e garantir sua vaga nos eventos acadêmicos do câmpus.
+          </p>
+        </div>
+
+        <ul class="showcase-features">
+          <li>
+            <span class="feature-check" aria-hidden="true">✓</span>
+            <span>Inscrição rápida em minicursos, palestras e workshops</span>
+          </li>
+          <li>
+            <span class="feature-check" aria-hidden="true">✓</span>
+            <span>Controle de vagas e cronograma atualizados em tempo real</span>
+          </li>
+          <li>
+            <span class="feature-check" aria-hidden="true">✓</span>
+            <span>Acesso integrado via e-mail acadêmico institucional</span>
+          </li>
+        </ul>
+
+        <div class="showcase-footer">
+          <span>Câmpus IFPB • Portal Acadêmico</span>
+        </div>
+      </aside>
+
+      <!-- Painel Direito: Formulários Limpos e Contextuais -->
+      <div class="auth-panel">
+
+        <!-- 1. VISÃO PADRÃO: ENTRAR (ALUNO) -->
+        <div id="view-login-aluno" class="auth-view">
+          <div class="auth-header">
+            <h2>Entrar no Portal</h2>
+            <p>Acesse com seu e-mail institucional e sua senha cadastrada.</p>
+          </div>
+
+          <form id="form-login-aluno" class="login-form" novalidate>
+            <div class="form-group">
+              <label for="login-email">E-mail Acadêmico</label>
+              <input type="email" id="login-email" placeholder="seu.nome@academico.ifpb.edu.br" autocomplete="email">
+              <span class="error-msg" id="error-login-email"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Senha</label>
+              <div class="password-field">
+                <input type="password" id="login-password" placeholder="Digite sua senha" autocomplete="current-password">
+                <button type="button" class="btn-toggle-pass" data-toggle-password="login-password" aria-label="Mostrar senha" title="Mostrar/ocultar senha">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <span class="error-msg" id="error-login-password"></span>
+            </div>
+
+            <button type="submit" class="btn-login-submit">Entrar</button>
+          </form>
+
+          <p class="auth-switch-prompt">
+            Primeiro acesso ao IFEventos?
+            <button type="button" class="btn-link-inline" data-auth-view="register-aluno">Criar conta acadêmica</button>
+          </p>
+
+          <div class="auth-divider">
+            <span>ou</span>
+          </div>
+
+          <button type="button" class="btn-admin-portal-link" data-auth-view="login-admin">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Acesso Administrativo (Coordenação)</span>
+          </button>
+        </div>
+
+        <!-- 2. VISÃO: CRIAR CONTA ÚNICA (ALUNO) -->
+        <div id="view-register-aluno" class="auth-view" hidden>
+          <button type="button" class="btn-back-link" data-auth-view="login-aluno">
+            ← Voltar para o login
+          </button>
+
+          <div class="auth-header">
+            <h2>Criar Conta Acadêmica</h2>
+            <p>Cadastro único vinculado ao seu e-mail institucional do IFPB.</p>
+          </div>
+
+          <form id="form-register-aluno" class="login-form" novalidate>
+            <div class="form-group">
+              <label for="reg-name">Nome / Nome Social</label>
+              <input type="text" id="reg-name" placeholder="Digite seu nome completo ou nome social" autocomplete="name">
+              <span class="error-msg" id="error-reg-name"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-email">E-mail Acadêmico</label>
+              <input type="email" id="reg-email" placeholder="seu.nome@academico.ifpb.edu.br" autocomplete="email">
+              <small class="field-hint">Obrigatório terminar com <strong>@academico.ifpb.edu.br</strong></small>
+              <span class="error-msg" id="error-reg-email"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-password">Criar Senha</label>
+              <div class="password-field">
+                <input type="password" id="reg-password" placeholder="Mínimo de 6 caracteres" autocomplete="new-password">
+                <button type="button" class="btn-toggle-pass" data-toggle-password="reg-password" aria-label="Mostrar senha" title="Mostrar/ocultar senha">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <span class="error-msg" id="error-reg-password"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-password-confirm">Confirmar Senha</label>
+              <input type="password" id="reg-password-confirm" placeholder="Repita a senha criada" autocomplete="new-password">
+              <span class="error-msg" id="error-reg-password-confirm"></span>
+            </div>
+
+            <button type="submit" class="btn-login-submit">Cadastrar e Entrar</button>
+          </form>
+
+          <p class="auth-switch-prompt">
+            Já possui cadastro?
+            <button type="button" class="btn-link-inline" data-auth-view="login-aluno">Fazer login</button>
+          </p>
+        </div>
+
+        <!-- 3. VISÃO: ACESSO ADMINISTRATIVO (COORDENAÇÃO) -->
+        <div id="view-login-admin" class="auth-view" hidden>
+          <button type="button" class="btn-back-link" data-auth-view="login-aluno">
+            ← Voltar para o acesso do aluno
+          </button>
+
+          <div class="auth-header">
+            <span class="admin-role-pill">Área Restrita</span>
+            <h2>Acesso Administrativo</h2>
+            <p>Exclusivo para organizadores e coordenação de eventos do câmpus.</p>
+          </div>
+
+          <form id="form-login-admin" class="login-form" novalidate>
+            <div class="form-group">
+              <label for="admin-password">Senha de Administrador</label>
+              <div class="password-field">
+                <input type="password" id="admin-password" placeholder="Digite a senha institucional">
+                <button type="button" class="btn-toggle-pass" data-toggle-password="admin-password" aria-label="Mostrar senha" title="Mostrar/ocultar senha">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <span class="error-msg" id="error-admin-password"></span>
+            </div>
+
+            <button type="submit" class="btn-login-submit">Acessar Painel Administrativo</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       APLICAÇÃO PRINCIPAL (EXIBIDA APÓS AUTENTICAÇÃO JWT)
+       ========================================================= -->
+  <div id="app-shell" class="app-shell" hidden>
+
+    <!-- CABEÇALHO -->
+    <header>
+      <div class="header-container">
+        <div class="brand">
+          <h1>IFEventos</h1>
+          <span>Câmpus IFPB</span>
+        </div>
+
+        <div class="header-actions">
+          <nav class="nav-tabs" role="tablist" aria-label="Navegação principal">
+            <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-events" id="tab-btn-events" data-tab="events">
+              Eventos Disponíveis
+            </button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-register" id="tab-btn-register" data-tab="register" hidden>
+              Cadastrar Evento
+            </button>
+          </nav>
+
+          <!-- Botão Minha Conta / CRUD de Senha -->
+          <button type="button" class="user-pill-btn" id="open-account-btn" title="Gerenciar conta e alterar senha">
+            <span class="user-name" id="header-user-name">Usuário</span>
+            <span class="user-role-tag" id="header-user-role">Aluno</span>
+          </button>
+
+          <!-- Botão de Modo Escuro com ícone de Lua -->
+          <button type="button" class="btn-theme-toggle" id="theme-toggle" aria-label="Ativar modo escuro" aria-pressed="false" title="Alternar modo claro/escuro">
+            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+            <span class="theme-label" id="theme-label">Modo Escuro</span>
+          </button>
+
+          <!-- Botão Sair -->
+          <button type="button" class="btn-logout" id="logout-btn" title="Encerrar sessão">
+            Sair
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="container">
+
+      <!-- ABA 1: CATÁLOGO DE EVENTOS -->
+      <section id="tab-events" class="tab-content active" role="tabpanel" aria-labelledby="tab-btn-events">
+
+        <!-- Indicadores -->
+        <div class="stats-bar">
+          <div class="stat-card">
+            <small>Total de Eventos</small>
+            <span class="stat-number" id="stat-total">0</span>
+          </div>
+          <div class="stat-card">
+            <small>Vagas Abertas</small>
+            <span class="stat-number" id="stat-vagas">0</span>
+          </div>
+          <div class="stat-card clickable" id="stat-card-inscritos" role="button" tabindex="0" aria-pressed="false" title="Clique para filtrar suas inscrições">
+            <small>
+              Minhas Inscrições
+              <span class="stat-hint" id="stat-inscritos-hint">Filtrar</span>
+            </small>
+            <span class="stat-number" id="stat-inscritos">0</span>
+          </div>
+        </div>
+
+        <!-- Barra de Busca, Filtro de Categoria e Filtro de Período -->
+        <div class="search-filter-bar">
+          <div class="search-input-wrapper">
+            <input type="text" id="search-input" aria-label="Pesquisar por título do evento ou ministrante" placeholder="Pesquisar por título do evento ou ministrante...">
+          </div>
+          <select id="filter-category" class="filter-select" aria-label="Filtrar por categoria">
+            <option value="todos">Todas as Categorias</option>
+            <option value="Minicurso">Minicursos</option>
+            <option value="Palestra">Palestras</option>
+            <option value="Workshop">Workshops</option>
+          </select>
+          <select id="filter-date" class="filter-select" aria-label="Filtrar por período">
+            <option value="todos">Todas as Datas</option>
+            <option value="hoje">Hoje</option>
+            <option value="semana">Próximos 7 dias</option>
+            <option value="mes">Próximos 30 dias</option>
+          </select>
+        </div>
+
+        <!-- Barra de status da listagem -->
+        <div class="results-toolbar">
+          <span id="results-summary">Exibindo eventos em ordem cronológica • Clique em um evento para confirmar presença</span>
+          <button type="button" class="btn-clear-inline" id="btn-clear-top" hidden>
+            Limpar filtros ativos
+          </button>
+        </div>
+
+        <!-- Grade de Eventos -->
+        <div id="events-grid" class="events-grid"></div>
+      </section>
+
+      <!-- ABA 2: CADASTRO DE NOVO EVENTO (EXCLUSIVO ADMINISTRADOR) -->
+      <section id="tab-register" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-register">
+        <div class="form-wrapper">
+          <div class="form-header">
+            <h2>Cadastrar Novo Evento Acadêmico</h2>
+            <p>Os eventos publicados ficam salvos no banco de dados SQLite do sistema.</p>
+          </div>
+
+          <form id="event-form" novalidate>
+            <div class="form-grid">
+
+              <div class="form-group full-width">
+                <label for="title">Título do Evento *</label>
+                <input type="text" id="title" name="title" placeholder="Ex: Introdução ao Desenvolvimento Web com JS">
+                <span class="error-msg" id="error-title"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="speaker">Ministrante / Palestrante *</label>
+                <input type="text" id="speaker" name="speaker" placeholder="Ex: Prof. Carlos Eduardo">
+                <span class="error-msg" id="error-speaker"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="category">Categoria *</label>
+                <select id="category" name="category">
+                  <option value="Minicurso">Minicurso</option>
+                  <option value="Palestra">Palestra</option>
+                  <option value="Workshop">Workshop</option>
+                </select>
+                <span class="error-msg" id="error-category"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="datetime">Data e Horário *</label>
+                <input type="datetime-local" id="datetime" name="datetime">
+                <span class="error-msg" id="error-datetime"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="location">Local do Evento *</label>
+                <input type="text" id="location" name="location" placeholder="Ex: Laboratório de Informática 03">
+                <span class="error-msg" id="error-location"></span>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="vagas">Quantidade de Vagas Abertas *</label>
+                <input type="number" id="vagas" name="vagas" placeholder="Ex: 25" min="1" max="500">
+                <span class="error-msg" id="error-vagas"></span>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="description">Descrição / Ementa do Evento (opcional)</label>
+                <textarea id="description" name="description" rows="3" placeholder="Descreva os objetivos, público-alvo ou requisitos da atividade..."></textarea>
+              </div>
+
+              <button type="submit" class="btn-submit">Salvar e Publicar Evento</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer>
+      <p>IFEventos - Desenvolvido por Luan Bento, Gustavo Dantas e Daniel Isaque - Instituto Federal da Paraíba (IFPB)</p>
+    </footer>
+  </div>
+
+  <!-- =========================================================
+       MODAL: CRUD DE CONTA, ALTERAÇÃO DE SENHA E GESTÃO DE ALUNOS
+       ========================================================= -->
+  <dialog id="account-dialog" class="app-dialog account-dialog" aria-labelledby="account-dialog-title">
+    <div class="detail-dialog-header">
+      <h3 id="account-dialog-title">Minha Conta e Senha</h3>
+      <button type="button" class="btn-close-x" id="account-close-x" aria-label="Fechar janela">&times;</button>
+    </div>
+
+    <div class="detail-info-box" id="account-profile-box">
+      <p><strong>Nome:</strong> <span id="acc-name">-</span></p>
+      <p><strong>E-mail:</strong> <span id="acc-email">-</span></p>
+      <p><strong>Perfil:</strong> <span id="acc-role">-</span></p>
+    </div>
+
+    <form id="form-change-password" class="login-form" novalidate>
+      <h4 class="section-subtitle">Alterar Senha de Acesso</h4>
+
+      <div class="form-group">
+        <label for="current-password">Senha Atual *</label>
+        <input type="password" id="current-password" placeholder="Digite sua senha atual">
+        <span class="error-msg" id="error-current-password"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="new-password">Nova Senha *</label>
+        <input type="password" id="new-password" placeholder="Digite a nova senha">
+        <span class="error-msg" id="error-new-password"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-new-password">Confirmar Nova Senha *</label>
+        <input type="password" id="confirm-new-password" placeholder="Repita a nova senha">
+        <span class="error-msg" id="error-confirm-new-password"></span>
+      </div>
+
+      <button type="submit" class="btn-dialog-primary">Salvar Nova Senha</button>
+    </form>
+
+    <div id="student-delete-zone" class="danger-zone" hidden>
+      <p>Deseja encerrar seu cadastro e liberar todas as suas vagas reservadas?</p>
+      <button type="button" class="btn-delete-account" id="btn-delete-own-account">Excluir Minha Conta</button>
+    </div>
+
+    <div id="admin-users-zone" class="admin-users-zone" hidden>
+      <h4 class="section-subtitle">Alunos Cadastrados no Banco SQL</h4>
+      <div id="admin-users-list" class="admin-users-list"></div>
+    </div>
+  </dialog>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE PRESENÇA / CANCELAMENTO AO CLICAR NO EVENTO -->
+  <dialog id="event-detail-dialog" class="app-dialog" aria-labelledby="detail-title">
+    <div class="detail-dialog-header">
+      <div class="detail-badges" id="detail-badges"></div>
+      <button type="button" class="btn-close-x" id="detail-close-x" aria-label="Fechar janela">&times;</button>
+    </div>
+
+    <h3 id="detail-title">Título do Evento</h3>
+    <p class="detail-description" id="detail-description"></p>
+
+    <div class="detail-info-box">
+      <p><strong>Ministrante:</strong> <span id="detail-speaker"></span></p>
+      <p><strong>Data e Horário:</strong> <span id="detail-datetime"></span></p>
+      <p><strong>Local:</strong> <span id="detail-location"></span></p>
+    </div>
+
+    <div class="detail-capacity" id="detail-capacity"></div>
+    <div class="detail-prompt-box" id="detail-prompt-box"></div>
+
+    <div class="dialog-actions">
+      <button type="button" class="btn-dialog-cancel" id="detail-cancel-btn">Fechar</button>
+      <button type="button" class="btn-dialog-primary" id="detail-action-btn">Confirmar Presença</button>
+    </div>
+  </dialog>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO DE EVENTO (ADMINISTRADOR) -->
+  <dialog id="confirm-dialog" class="app-dialog" aria-labelledby="dialog-title">
+    <h3 id="dialog-title" class="danger-title">Remover Evento</h3>
+    <p id="dialog-message">Tem certeza que deseja excluir este evento? Esta ação não poderá ser desfeita.</p>
+    <div class="dialog-actions">
+      <button type="button" class="btn-dialog-cancel" id="dialog-cancel">Voltar</button>
+      <button type="button" class="btn-dialog-confirm" id="dialog-confirm">Confirmar Exclusão</button>
+    </div>
+  </dialog>
+
+  <!-- CONTÊINER DE NOTIFICAÇÕES (TOAST) -->
+  <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
+
+</body>
+</html>
