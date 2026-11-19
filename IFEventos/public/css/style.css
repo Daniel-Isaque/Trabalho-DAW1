@@ -1342,3 +1342,203 @@ footer {
     grid-column: span 1;
   }
 }
+
+/* =========================================================
+   PERFIS (ALUNO / PROFESSOR / ADMIN), GESTÃO DE EVENTOS E CERTIFICADOS
+   ========================================================= */
+
+.full-width { grid-column: span 2; }
+
+.notice-box {
+  background: var(--ifpb-green-light);
+  color: var(--text-main);
+  border: 1px solid var(--ifpb-green);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+/* --- Seletor de tipo de conta (cadastro) --- */
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 4px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+.segmented-option { cursor: pointer; }
+.segmented-option input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented-option span {
+  display: block;
+  text-align: center;
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.15s ease;
+}
+.segmented-option input:checked + span {
+  background: var(--ifpb-green);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+.segmented-option input:focus-visible + span { outline: 2px solid var(--ifpb-green); outline-offset: 2px; }
+.reg-extra { display: flex; flex-direction: column; gap: 16px; }
+
+/* --- Cabeçalho de painéis --- */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.panel-header h2 { font-size: 22px; color: var(--text-main); }
+.panel-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+/* --- Selos de situação --- */
+.badge-status, .badge-waitlist {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.status-rascunho  { background: #eceff1; color: #455a64; }
+.status-pendente  { background: #fff8e1; color: #8d6e00; }
+.status-aprovado  { background: #e8f5e9; color: #1b5e20; }
+.status-rejeitado { background: #ffebee; color: #b71c1c; }
+.status-cancelado { background: #eceff1; color: #6d4c41; }
+.status-encerrado { background: #e3f2fd; color: #0d47a1; }
+.badge-waitlist   { background: #fff3e0; color: #bf360c; }
+[data-theme="dark"] .status-rascunho  { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
+[data-theme="dark"] .status-pendente  { background: rgba(255, 193, 7, 0.18); color: #ffd54f; }
+[data-theme="dark"] .status-aprovado  { background: rgba(76, 175, 80, 0.2); color: #a5d6a7; }
+[data-theme="dark"] .status-rejeitado { background: rgba(239, 83, 80, 0.2); color: #ef9a9a; }
+[data-theme="dark"] .status-cancelado { background: rgba(161, 136, 127, 0.2); color: #d7ccc8; }
+[data-theme="dark"] .status-encerrado { background: rgba(66, 165, 245, 0.2); color: #90caf9; }
+[data-theme="dark"] .badge-waitlist   { background: rgba(255, 167, 38, 0.2); color: #ffcc80; }
+
+/* --- Listas de gestão (eventos, usuários, certificados) --- */
+.manage-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+.manage-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+}
+.manage-main { flex: 1 1 320px; min-width: 0; }
+.manage-main h3 { font-size: 16px; margin: 8px 0 6px; color: var(--text-main); }
+.manage-meta { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.manage-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; align-items: center; }
+.reject-note {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--danger);
+  background: var(--danger-bg);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--text-main);
+}
+
+/* --- Formulário de evento --- */
+.form-fieldset {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.form-fieldset legend { padding: 0 8px; font-size: 13px; font-weight: 700; color: var(--text-main); }
+.inner-grid { gap: 14px; }
+.sessions-list { display: flex; flex-direction: column; gap: 8px; }
+.session-row { display: grid; grid-template-columns: 1fr 110px auto auto; gap: 8px; align-items: center; }
+.session-unit { font-size: 12px; color: var(--text-muted); }
+.btn-add-row {
+  align-self: flex-start;
+  background: transparent;
+  color: var(--ifpb-green);
+  border: 1px dashed var(--ifpb-green);
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.check-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 14px; max-height: 190px; overflow-y: auto; }
+.check-inline { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-main); cursor: pointer; }
+.check-inline input { margin-top: 3px; width: auto; }
+.check-inline small { color: var(--text-muted); display: block; }
+.btn-secondary {
+  background: var(--surface-subtle);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 11px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* --- Modais --- */
+dialog.detail-dialog { max-width: 560px; max-height: 92vh; overflow-y: auto; }
+dialog.wide-dialog { max-width: 900px; max-height: 92vh; overflow-y: auto; }
+.session-list { margin: 2px 0 8px 18px; font-size: 13px; color: var(--text-main); }
+.detail-info-box p + p { margin-top: 4px; }
+.detail-info-box a { color: var(--ifpb-green); word-break: break-all; }
+
+.table-scroll { overflow-x: auto; margin-top: 10px; }
+.attendees-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.attendees-table th, .attendees-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  vertical-align: middle;
+}
+.attendees-table th { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
+.attendees-table td small { color: var(--text-muted); }
+.attendees-table input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+.attendees-table input[type="checkbox"]:disabled { cursor: not-allowed; opacity: 0.45; }
+
+/* --- Certificado --- */
+.certificate {
+  border: 6px double var(--ifpb-green);
+  border-radius: 6px;
+  padding: 36px 30px;
+  text-align: center;
+  background: var(--card-bg);
+  color: var(--text-main);
+}
+.certificate h2 { font-size: 28px; margin: 12px 0 18px; color: var(--ifpb-green); }
+.cert-org { font-size: 12px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--text-muted); }
+.cert-name { font-size: 26px; font-weight: 700; margin: 10px 0 14px; border-bottom: 1px solid var(--border-color); display: inline-block; padding: 0 24px 6px; }
+.cert-text { max-width: 560px; margin: 0 auto 18px; line-height: 1.6; font-size: 15px; }
+.cert-code { font-size: 13px; color: var(--text-muted); }
+.cert-verify { font-size: 11px; color: var(--text-muted); margin-top: 4px; word-break: break-all; }
+
+@media print {
+  body > *:not(#certificate-dialog) { display: none !important; }
+  #certificate-dialog { position: static; border: none; box-shadow: none; max-width: none; width: 100%; padding: 0; }
+  #certificate-dialog::backdrop { display: none; }
+  .no-print { display: none !important; }
+}
+
+@media (max-width: 640px) {
+  .full-width { grid-column: span 1; }
+  .session-row { grid-template-columns: 1fr 90px auto; }
+  .session-row .session-remove { grid-column: 1 / -1; justify-self: start; }
+  nav.nav-tabs { flex-wrap: wrap; }
+  .manage-actions { justify-content: flex-start; }
+}

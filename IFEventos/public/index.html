@@ -74,13 +74,14 @@
         <div id="view-login-aluno" class="auth-view">
           <div class="auth-header">
             <h2>Entrar no Portal</h2>
-            <p>Acesse com seu e-mail institucional e sua senha cadastrada.</p>
+            <p>Alunos, professores e coordenação entram com o e-mail institucional e a senha cadastrada.</p>
+          <div class="notice-box" id="login-notice" role="status" hidden></div>
           </div>
 
           <form id="form-login-aluno" class="login-form" novalidate>
             <div class="form-group">
-              <label for="login-email">E-mail Acadêmico</label>
-              <input type="email" id="login-email" placeholder="seu.nome@academico.ifpb.edu.br" autocomplete="email">
+              <label for="login-email">E-mail Institucional</label>
+              <input type="email" id="login-email" placeholder="nome@academico.ifpb.edu.br ou nome@ifpb.edu.br" autocomplete="email">
               <span class="error-msg" id="error-login-email"></span>
             </div>
 
@@ -100,19 +101,8 @@
 
           <p class="auth-switch-prompt">
             Primeiro acesso ao IFEventos?
-            <button type="button" class="btn-link-inline" data-auth-view="register-aluno">Criar conta acadêmica</button>
+            <button type="button" class="btn-link-inline" data-auth-view="register-aluno">Criar conta</button>
           </p>
-
-          <div class="auth-divider">
-            <span>ou</span>
-          </div>
-
-          <button type="button" class="btn-admin-portal-link" data-auth-view="login-admin">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            <span>Acesso Administrativo (Coordenação)</span>
-          </button>
         </div>
 
         <!-- 2. VISÃO: CRIAR CONTA ÚNICA (ALUNO) -->
@@ -122,11 +112,16 @@
           </button>
 
           <div class="auth-header">
-            <h2>Criar Conta Acadêmica</h2>
+            <h2>Criar Conta</h2>
             <p>Cadastro único vinculado ao seu e-mail institucional do IFPB.</p>
           </div>
 
           <form id="form-register-aluno" class="login-form" novalidate>
+            <div class="segmented" role="radiogroup" aria-label="Tipo de conta">
+              <label class="segmented-option"><input type="radio" name="reg-tipo" value="aluno" checked><span>Sou aluno</span></label>
+              <label class="segmented-option"><input type="radio" name="reg-tipo" value="professor"><span>Sou professor</span></label>
+            </div>
+
             <div class="form-group">
               <label for="reg-name">Nome / Nome Social</label>
               <input type="text" id="reg-name" placeholder="Digite seu nome completo ou nome social" autocomplete="name">
@@ -134,10 +129,53 @@
             </div>
 
             <div class="form-group">
-              <label for="reg-email">E-mail Acadêmico</label>
+              <label for="reg-email">E-mail Institucional</label>
               <input type="email" id="reg-email" placeholder="seu.nome@academico.ifpb.edu.br" autocomplete="email">
-              <small class="field-hint">Obrigatório terminar com <strong>@academico.ifpb.edu.br</strong></small>
+              <small class="field-hint" id="reg-email-hint">Obrigatório terminar com <strong>@academico.ifpb.edu.br</strong></small>
               <span class="error-msg" id="error-reg-email"></span>
+            </div>
+
+            <div id="reg-fields-aluno" class="reg-extra">
+              <div class="form-group">
+                <label for="reg-matricula">Matrícula</label>
+                <input type="text" id="reg-matricula" inputmode="numeric" placeholder="Somente números" autocomplete="off">
+                <span class="error-msg" id="error-reg-matricula"></span>
+              </div>
+              <div class="form-group">
+                <label for="reg-curso">Curso</label>
+                <input type="text" id="reg-curso" placeholder="Ex: Sistemas para Internet" autocomplete="off">
+                <span class="error-msg" id="error-reg-curso"></span>
+              </div>
+              <div class="form-group">
+                <label for="reg-periodo">Período (opcional)</label>
+                <input type="number" id="reg-periodo" min="1" max="12" placeholder="Ex: 3">
+                <span class="error-msg" id="error-reg-periodo"></span>
+              </div>
+            </div>
+
+            <div id="reg-fields-professor" class="reg-extra" hidden>
+              <div class="form-group">
+                <label for="reg-siape">SIAPE</label>
+                <input type="text" id="reg-siape" inputmode="numeric" placeholder="Somente números" autocomplete="off">
+                <span class="error-msg" id="error-reg-siape"></span>
+              </div>
+              <div class="form-group">
+                <label for="reg-departamento">Departamento / Coordenação</label>
+                <input type="text" id="reg-departamento" placeholder="Ex: Coordenação de Informática" autocomplete="off">
+                <span class="error-msg" id="error-reg-departamento"></span>
+              </div>
+              <div class="form-group">
+                <label for="reg-titulacao">Titulação</label>
+                <select id="reg-titulacao">
+                  <option value="">Selecione...</option>
+                  <option value="Graduação">Graduação</option>
+                  <option value="Especialização">Especialização</option>
+                  <option value="Mestrado">Mestrado</option>
+                  <option value="Doutorado">Doutorado</option>
+                </select>
+                <span class="error-msg" id="error-reg-titulacao"></span>
+              </div>
+              <small class="field-hint">Contas de professor ficam <strong>pendentes</strong> até a aprovação de um administrador.</small>
             </div>
 
             <div class="form-group">
@@ -157,41 +195,13 @@
               <span class="error-msg" id="error-reg-password-confirm"></span>
             </div>
 
-            <button type="submit" class="btn-login-submit">Cadastrar e Entrar</button>
+            <button type="submit" class="btn-login-submit" id="btn-register-submit">Cadastrar e Entrar</button>
           </form>
 
           <p class="auth-switch-prompt">
             Já possui cadastro?
             <button type="button" class="btn-link-inline" data-auth-view="login-aluno">Fazer login</button>
           </p>
-        </div>
-
-        <!-- 3. VISÃO: ACESSO ADMINISTRATIVO (COORDENAÇÃO) -->
-        <div id="view-login-admin" class="auth-view" hidden>
-          <button type="button" class="btn-back-link" data-auth-view="login-aluno">
-            ← Voltar para o acesso do aluno
-          </button>
-
-          <div class="auth-header">
-            <span class="admin-role-pill">Área Restrita</span>
-            <h2>Acesso Administrativo</h2>
-            <p>Exclusivo para organizadores e coordenação de eventos do câmpus.</p>
-          </div>
-
-          <form id="form-login-admin" class="login-form" novalidate>
-            <div class="form-group">
-              <label for="admin-password">Senha de Administrador</label>
-              <div class="password-field">
-                <input type="password" id="admin-password" placeholder="Digite a senha institucional">
-                <button type="button" class="btn-toggle-pass" data-toggle-password="admin-password" aria-label="Mostrar senha" title="Mostrar/ocultar senha">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                </button>
-              </div>
-              <span class="error-msg" id="error-admin-password"></span>
-            </div>
-
-            <button type="submit" class="btn-login-submit">Acessar Painel Administrativo</button>
-          </form>
         </div>
 
       </div>
@@ -214,20 +224,29 @@
         <div class="header-actions">
           <nav class="nav-tabs" role="tablist" aria-label="Navegação principal">
             <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-events" id="tab-btn-events" data-tab="events">
-              Eventos Disponíveis
+              Eventos
+            </button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-manage" id="tab-btn-manage" data-tab="manage" hidden>
+              Meus Eventos
             </button>
             <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-register" id="tab-btn-register" data-tab="register" hidden>
               Cadastrar Evento
             </button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-certs" id="tab-btn-certs" data-tab="certs" hidden>
+              Certificados
+            </button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-users" id="tab-btn-users" data-tab="users" hidden>
+              Usuários
+            </button>
           </nav>
 
-          <!-- Botão Minha Conta / CRUD de Senha -->
+          <!-- Botão Minha Conta -->
           <button type="button" class="user-pill-btn" id="open-account-btn" title="Gerenciar conta e alterar senha">
             <span class="user-name" id="header-user-name">Usuário</span>
             <span class="user-role-tag" id="header-user-role">Aluno</span>
           </button>
 
-          <!-- Botão de Modo Escuro com ícone de Lua -->
+          <!-- Botão de Modo Escuro -->
           <button type="button" class="btn-theme-toggle" id="theme-toggle" aria-label="Ativar modo escuro" aria-pressed="false" title="Alternar modo claro/escuro">
             <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
@@ -239,21 +258,16 @@
             <span class="theme-label" id="theme-label">Modo Escuro</span>
           </button>
 
-          <!-- Botão Sair -->
-          <button type="button" class="btn-logout" id="logout-btn" title="Encerrar sessão">
-            Sair
-          </button>
+          <button type="button" class="btn-logout" id="logout-btn" title="Encerrar sessão">Sair</button>
         </div>
       </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <main class="container">
 
-      <!-- ABA 1: CATÁLOGO DE EVENTOS -->
+      <!-- ABA: CATÁLOGO DE EVENTOS -->
       <section id="tab-events" class="tab-content active" role="tabpanel" aria-labelledby="tab-btn-events">
 
-        <!-- Indicadores -->
         <div class="stats-bar">
           <div class="stat-card">
             <small>Total de Eventos</small>
@@ -263,7 +277,7 @@
             <small>Vagas Abertas</small>
             <span class="stat-number" id="stat-vagas">0</span>
           </div>
-          <div class="stat-card clickable" id="stat-card-inscritos" role="button" tabindex="0" aria-pressed="false" title="Clique para filtrar suas inscrições">
+          <div class="stat-card clickable" id="stat-card-inscritos" role="button" tabindex="0" aria-pressed="false" title="Clique para filtrar suas inscrições" hidden>
             <small>
               Minhas Inscrições
               <span class="stat-hint" id="stat-inscritos-hint">Filtrar</span>
@@ -272,13 +286,12 @@
           </div>
         </div>
 
-        <!-- Barra de Busca, Filtro de Categoria e Filtro de Período -->
         <div class="search-filter-bar">
           <div class="search-input-wrapper">
-            <input type="text" id="search-input" aria-label="Pesquisar por título do evento ou ministrante" placeholder="Pesquisar por título do evento ou ministrante...">
+            <input type="text" id="search-input" aria-label="Pesquisar por título, ministrante ou local" placeholder="Pesquisar por título, ministrante ou local...">
           </div>
-          <select id="filter-category" class="filter-select" aria-label="Filtrar por categoria">
-            <option value="todos">Todas as Categorias</option>
+          <select id="filter-category" class="filter-select" aria-label="Filtrar por tipo de evento">
+            <option value="todos">Todos os Tipos</option>
             <option value="Minicurso">Minicursos</option>
             <option value="Palestra">Palestras</option>
             <option value="Workshop">Workshops</option>
@@ -291,91 +304,215 @@
           </select>
         </div>
 
-        <!-- Barra de status da listagem -->
         <div class="results-toolbar">
-          <span id="results-summary">Exibindo eventos em ordem cronológica • Clique em um evento para confirmar presença</span>
-          <button type="button" class="btn-clear-inline" id="btn-clear-top" hidden>
-            Limpar filtros ativos
-          </button>
+          <span id="results-summary"></span>
+          <button type="button" class="btn-clear-inline" id="btn-clear-top" hidden>Limpar filtros ativos</button>
         </div>
 
-        <!-- Grade de Eventos -->
         <div id="events-grid" class="events-grid"></div>
       </section>
 
-      <!-- ABA 2: CADASTRO DE NOVO EVENTO (EXCLUSIVO ADMINISTRADOR) -->
+      <!-- ABA: GERENCIAR EVENTOS (PROFESSOR / ADMIN) -->
+      <section id="tab-manage" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-manage">
+        <div class="panel-header">
+          <div>
+            <h2 id="manage-title">Meus Eventos</h2>
+            <p id="manage-subtitle">Acompanhe o andamento dos eventos que você criou.</p>
+          </div>
+          <select id="manage-status-filter" class="filter-select" aria-label="Filtrar por situação">
+            <option value="todos">Todas as situações</option>
+            <option value="pendente">Aguardando aprovação</option>
+            <option value="aprovado">Aprovados</option>
+            <option value="rascunho">Rascunhos</option>
+            <option value="rejeitado">Rejeitados</option>
+            <option value="encerrado">Encerrados</option>
+            <option value="cancelado">Cancelados</option>
+          </select>
+        </div>
+        <div id="manage-list" class="manage-list"></div>
+      </section>
+
+      <!-- ABA: CADASTRAR / EDITAR EVENTO (PROFESSOR / ADMIN) -->
       <section id="tab-register" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-register">
         <div class="form-wrapper">
           <div class="form-header">
-            <h2>Cadastrar Novo Evento Acadêmico</h2>
-            <p>Os eventos publicados ficam salvos no banco de dados SQLite do sistema.</p>
+            <h2 id="event-form-title">Cadastrar Novo Evento Acadêmico</h2>
+            <p id="event-form-subtitle">Eventos de professores passam pela aprovação de um administrador antes de aparecerem no catálogo.</p>
           </div>
 
           <form id="event-form" novalidate>
+            <input type="hidden" id="event-id">
             <div class="form-grid">
 
               <div class="form-group full-width">
                 <label for="title">Título do Evento *</label>
-                <input type="text" id="title" name="title" placeholder="Ex: Introdução ao Desenvolvimento Web com JS">
+                <input type="text" id="title" name="title" maxlength="150" placeholder="Ex: Introdução ao Desenvolvimento Web com JS">
                 <span class="error-msg" id="error-title"></span>
               </div>
 
               <div class="form-group">
-                <label for="speaker">Ministrante / Palestrante *</label>
-                <input type="text" id="speaker" name="speaker" placeholder="Ex: Prof. Carlos Eduardo">
-                <span class="error-msg" id="error-speaker"></span>
-              </div>
-
-              <div class="form-group">
-                <label for="category">Categoria *</label>
-                <select id="category" name="category">
+                <label for="tipo">Tipo de Evento *</label>
+                <select id="tipo" name="tipo">
                   <option value="Minicurso">Minicurso</option>
                   <option value="Palestra">Palestra</option>
                   <option value="Workshop">Workshop</option>
                 </select>
-                <span class="error-msg" id="error-category"></span>
               </div>
 
               <div class="form-group">
-                <label for="datetime">Data e Horário *</label>
-                <input type="datetime-local" id="datetime" name="datetime">
-                <span class="error-msg" id="error-datetime"></span>
-              </div>
-
-              <div class="form-group">
-                <label for="location">Local do Evento *</label>
-                <input type="text" id="location" name="location" placeholder="Ex: Laboratório de Informática 03">
-                <span class="error-msg" id="error-location"></span>
+                <label for="local">Local *</label>
+                <select id="local" name="local"></select>
+                <span class="error-msg" id="error-local"></span>
               </div>
 
               <div class="form-group full-width">
-                <label for="vagas">Quantidade de Vagas Abertas *</label>
+                <label for="vagas">Quantidade de Vagas *</label>
                 <input type="number" id="vagas" name="vagas" placeholder="Ex: 25" min="1" max="500">
+                <small class="field-hint" id="vagas-hint">Limitado à capacidade do local escolhido.</small>
                 <span class="error-msg" id="error-vagas"></span>
               </div>
 
+              <!-- Sessões -->
+              <fieldset class="form-fieldset full-width">
+                <legend>Sessões (datas e horários) *</legend>
+                <div id="sessions-list" class="sessions-list"></div>
+                <button type="button" class="btn-add-row" id="btn-add-session">+ Adicionar outra sessão</button>
+                <span class="error-msg" id="error-sessions"></span>
+              </fieldset>
+
+              <!-- Ministrantes -->
+              <fieldset class="form-fieldset full-width">
+                <legend>Ministrantes *</legend>
+                <div id="ministrantes-prof" class="check-list" aria-label="Professores do câmpus"></div>
+                <div class="form-group">
+                  <label for="ministrantes-ext">Ministrantes externos (opcional)</label>
+                  <input type="text" id="ministrantes-ext" placeholder="Nomes separados por vírgula. Ex: Esp. Fernanda Alves, Dr. João Pereira">
+                </div>
+              </fieldset>
+
+              <!-- Detalhes específicos: Minicurso -->
+              <fieldset class="form-fieldset full-width" id="fs-Minicurso">
+                <legend>Detalhes do Minicurso</legend>
+                <div class="form-grid inner-grid">
+                  <div class="form-group">
+                    <label for="mc-carga">Carga horária total (h) *</label>
+                    <input type="number" id="mc-carga" min="1" max="200" placeholder="Ex: 8">
+                  </div>
+                  <div class="form-group">
+                    <label for="mc-nivel">Nível</label>
+                    <select id="mc-nivel">
+                      <option value="iniciante">Iniciante</option>
+                      <option value="intermediario">Intermediário</option>
+                      <option value="avancado">Avançado</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="mc-freq">Frequência mínima p/ certificado (%)</label>
+                    <input type="number" id="mc-freq" min="50" max="100" value="75">
+                  </div>
+                  <div class="form-group">
+                    <label for="mc-prereq">Pré-requisitos</label>
+                    <input type="text" id="mc-prereq" maxlength="500" placeholder="Ex: Noções de lógica de programação">
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- Detalhes específicos: Palestra -->
+              <fieldset class="form-fieldset full-width" id="fs-Palestra" hidden>
+                <legend>Detalhes da Palestra</legend>
+                <div class="form-grid inner-grid">
+                  <div class="form-group">
+                    <label for="pa-publico">Público-alvo</label>
+                    <input type="text" id="pa-publico" maxlength="300" placeholder="Ex: Estudantes de todos os cursos">
+                  </div>
+                  <div class="form-group">
+                    <label for="pa-link">Link de transmissão (opcional)</label>
+                    <input type="url" id="pa-link" placeholder="https://...">
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- Detalhes específicos: Workshop -->
+              <fieldset class="form-fieldset full-width" id="fs-Workshop" hidden>
+                <legend>Detalhes do Workshop</legend>
+                <div class="form-grid inner-grid">
+                  <div class="form-group">
+                    <label for="wk-equipe">Pessoas por equipe</label>
+                    <input type="number" id="wk-equipe" min="1" max="10" value="1">
+                  </div>
+                  <div class="form-group">
+                    <label for="wk-materiais">Materiais necessários</label>
+                    <input type="text" id="wk-materiais" maxlength="500" placeholder="Ex: Notebook com Git instalado">
+                  </div>
+                  <div class="form-group full-width">
+                    <label for="wk-entrega">Entrega final (opcional)</label>
+                    <input type="text" id="wk-entrega" maxlength="500" placeholder="Ex: Projeto publicado no GitHub">
+                  </div>
+                </div>
+              </fieldset>
+
               <div class="form-group full-width">
                 <label for="description">Descrição / Ementa do Evento (opcional)</label>
-                <textarea id="description" name="description" rows="3" placeholder="Descreva os objetivos, público-alvo ou requisitos da atividade..."></textarea>
+                <textarea id="description" name="description" rows="3" maxlength="2000" placeholder="Descreva os objetivos e o conteúdo da atividade..."></textarea>
               </div>
 
-              <button type="submit" class="btn-submit">Salvar e Publicar Evento</button>
+              <label class="check-inline full-width" id="rascunho-wrap" hidden>
+                <input type="checkbox" id="rascunho">
+                <span>Salvar como rascunho (não enviar para aprovação agora)</span>
+              </label>
+
+              <span class="error-msg full-width" id="error-event-form"></span>
+
+              <button type="submit" class="btn-submit" id="btn-event-submit">Salvar e Publicar Evento</button>
+              <button type="button" class="btn-secondary full-width" id="btn-cancel-edit" hidden>Cancelar edição</button>
             </div>
           </form>
         </div>
       </section>
 
+      <!-- ABA: CERTIFICADOS (ALUNO) -->
+      <section id="tab-certs" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-certs">
+        <div class="panel-header">
+          <div>
+            <h2>Meus Certificados</h2>
+            <p>O certificado é liberado quando o evento termina e sua frequência atinge o mínimo exigido.</p>
+          </div>
+        </div>
+        <h3 class="section-subtitle">Disponíveis para emissão</h3>
+        <div id="certs-available" class="manage-list"></div>
+        <h3 class="section-subtitle">Emitidos</h3>
+        <div id="certs-issued" class="manage-list"></div>
+      </section>
+
+      <!-- ABA: USUÁRIOS (ADMIN) -->
+      <section id="tab-users" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-users">
+        <div class="panel-header">
+          <div>
+            <h2>Usuários</h2>
+            <p>Aprove cadastros de professores e gerencie alunos e professores.</p>
+          </div>
+          <select id="users-filter" class="filter-select" aria-label="Filtrar usuários">
+            <option value="pendentes">Cadastros pendentes</option>
+            <option value="todos">Todos</option>
+            <option value="aluno">Alunos</option>
+            <option value="professor">Professores</option>
+          </select>
+        </div>
+        <div id="users-list" class="manage-list"></div>
+      </section>
+
     </main>
 
-    <!-- RODAPÉ -->
     <footer>
       <p>IFEventos - Desenvolvido por Luan Bento, Gustavo Dantas e Daniel Isaque - Instituto Federal da Paraíba (IFPB)</p>
     </footer>
   </div>
 
   <!-- =========================================================
-       MODAL: CRUD DE CONTA, ALTERAÇÃO DE SENHA E GESTÃO DE ALUNOS
+       MODAIS
        ========================================================= -->
+
+  <!-- Minha conta -->
   <dialog id="account-dialog" class="app-dialog account-dialog" aria-labelledby="account-dialog-title">
     <div class="detail-dialog-header">
       <h3 id="account-dialog-title">Minha Conta e Senha</h3>
@@ -386,6 +523,7 @@
       <p><strong>Nome:</strong> <span id="acc-name">-</span></p>
       <p><strong>E-mail:</strong> <span id="acc-email">-</span></p>
       <p><strong>Perfil:</strong> <span id="acc-role">-</span></p>
+      <div id="acc-extra"></div>
     </div>
 
     <form id="form-change-password" class="login-form" novalidate>
@@ -413,18 +551,13 @@
     </form>
 
     <div id="student-delete-zone" class="danger-zone" hidden>
-      <p>Deseja encerrar seu cadastro e liberar todas as suas vagas reservadas?</p>
+      <p>Deseja encerrar seu cadastro? Suas inscrições serão canceladas e as vagas liberadas.</p>
       <button type="button" class="btn-delete-account" id="btn-delete-own-account">Excluir Minha Conta</button>
-    </div>
-
-    <div id="admin-users-zone" class="admin-users-zone" hidden>
-      <h4 class="section-subtitle">Alunos Cadastrados no Banco SQL</h4>
-      <div id="admin-users-list" class="admin-users-list"></div>
     </div>
   </dialog>
 
-  <!-- MODAL DE CONFIRMAÇÃO DE PRESENÇA / CANCELAMENTO AO CLICAR NO EVENTO -->
-  <dialog id="event-detail-dialog" class="app-dialog" aria-labelledby="detail-title">
+  <!-- Detalhes do evento -->
+  <dialog id="event-detail-dialog" class="app-dialog detail-dialog" aria-labelledby="detail-title">
     <div class="detail-dialog-header">
       <div class="detail-badges" id="detail-badges"></div>
       <button type="button" class="btn-close-x" id="detail-close-x" aria-label="Fechar janela">&times;</button>
@@ -433,11 +566,7 @@
     <h3 id="detail-title">Título do Evento</h3>
     <p class="detail-description" id="detail-description"></p>
 
-    <div class="detail-info-box">
-      <p><strong>Ministrante:</strong> <span id="detail-speaker"></span></p>
-      <p><strong>Data e Horário:</strong> <span id="detail-datetime"></span></p>
-      <p><strong>Local:</strong> <span id="detail-location"></span></p>
-    </div>
+    <div class="detail-info-box" id="detail-info"></div>
 
     <div class="detail-capacity" id="detail-capacity"></div>
     <div class="detail-prompt-box" id="detail-prompt-box"></div>
@@ -448,17 +577,50 @@
     </div>
   </dialog>
 
-  <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO DE EVENTO (ADMINISTRADOR) -->
-  <dialog id="confirm-dialog" class="app-dialog" aria-labelledby="dialog-title">
-    <h3 id="dialog-title" class="danger-title">Remover Evento</h3>
-    <p id="dialog-message">Tem certeza que deseja excluir este evento? Esta ação não poderá ser desfeita.</p>
+  <!-- Inscritos e presenças -->
+  <dialog id="attendees-dialog" class="app-dialog wide-dialog" aria-labelledby="attendees-title">
+    <div class="detail-dialog-header">
+      <h3 id="attendees-title">Inscritos e Presenças</h3>
+      <button type="button" class="btn-close-x" id="attendees-close-x" aria-label="Fechar janela">&times;</button>
+    </div>
+    <p class="field-hint" id="attendees-summary"></p>
+    <div class="table-scroll" id="attendees-table"></div>
+  </dialog>
+
+  <!-- Rejeição de evento -->
+  <dialog id="reject-dialog" class="app-dialog" aria-labelledby="reject-title">
+    <h3 id="reject-title" class="danger-title">Rejeitar Evento</h3>
+    <p id="reject-message"></p>
+    <div class="form-group" style="margin-top:12px">
+      <label for="reject-reason">Justificativa (visível para o professor) *</label>
+      <textarea id="reject-reason" rows="3" maxlength="500" placeholder="Explique o que precisa ser ajustado..."></textarea>
+      <span class="error-msg" id="error-reject-reason"></span>
+    </div>
     <div class="dialog-actions">
-      <button type="button" class="btn-dialog-cancel" id="dialog-cancel">Voltar</button>
-      <button type="button" class="btn-dialog-confirm" id="dialog-confirm">Confirmar Exclusão</button>
+      <button type="button" class="btn-dialog-cancel" id="reject-cancel">Voltar</button>
+      <button type="button" class="btn-dialog-confirm" id="reject-confirm">Rejeitar Evento</button>
     </div>
   </dialog>
 
-  <!-- CONTÊINER DE NOTIFICAÇÕES (TOAST) -->
+  <!-- Certificado -->
+  <dialog id="certificate-dialog" class="app-dialog wide-dialog" aria-label="Certificado">
+    <div id="certificate-body"></div>
+    <div class="dialog-actions no-print">
+      <button type="button" class="btn-dialog-cancel" id="certificate-close">Fechar</button>
+      <button type="button" class="btn-dialog-primary" id="certificate-print">Imprimir / Salvar PDF</button>
+    </div>
+  </dialog>
+
+  <!-- Confirmação genérica -->
+  <dialog id="confirm-dialog" class="app-dialog" aria-labelledby="dialog-title">
+    <h3 id="dialog-title" class="danger-title">Confirmar</h3>
+    <p id="dialog-message"></p>
+    <div class="dialog-actions">
+      <button type="button" class="btn-dialog-cancel" id="dialog-cancel">Voltar</button>
+      <button type="button" class="btn-dialog-confirm" id="dialog-confirm">Confirmar</button>
+    </div>
+  </dialog>
+
   <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
 
 </body>
